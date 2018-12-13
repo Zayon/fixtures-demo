@@ -1,0 +1,17 @@
+App\Entity\ProductCategory:
+    category_tools:
+        name: 'tools'
+
+    category_lighting:
+        name: 'lighting'
+
+App\Entity\Product:
+    tools_products_{1..10}:
+        name: '<firstName()>'
+        category: '@category_tools' # reference to "category_tools" fixture
+        price: '<randomFloat(2, 10.00, 1000.00)>' # random price from 10 to 1000 euros
+
+    lighting_products_{1..5}:
+        name: '<firstName()>'
+        category: '@category_lighting' # reference to "category_lighting" fixture
+        price: '<randomFloat(2, 10.00, 1000.00)>' # random price from 10 to 1000 euros

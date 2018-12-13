@@ -1,37 +1,51 @@
 
-DOCKER_EXEC_BASE = docker run --rm -it -v "$$PWD":/app --user 1000:100 -w /app
-DOCKER_EXEC_COMPOSER = $(DOCKER_EXEC_BASE) composer
+DOCKER_EXEC_BASE = docker run --rm -it -v "$$PWD":/app --user $$(id -u):$$(id -g) -w /app
+DOCKER_EXEC_COMPOSER = $(DOCKER_EXEC_BASE) -v /tmp:/tmp composer
 DOCKER_EXEC_PHP = $(DOCKER_EXEC_BASE) php
-DOCKER_EXEC_CONSOLE = $(DOCKER_EXEC_BASE) php bin/console
 
 ##
 ## Project
 ## -------
 ##
 
-console: ## Run bin/console
-	$(DOCKER_EXEC_CONSOLE)
-
 run: ## Runs the server
+run: vendor
 	$(DOCKER_EXEC_BASE) -p 8081:8081 --name fixture-demo php bin/console -vvv server:run 0.0.0.0:8081
+.PHONY: run
 
 stop: ## Stops the server
 	docker kill fixture-demo
+.PHONY: stop
+
+clean: ## Clean
+	rm -rf var vendor
+.PHONY: clean
 
 ##
-## Utils
-## -----
+## QA
+## --
 ##
+
+behat: ## Run behat tests
+behat: vendor
+	$(DOCKER_EXEC_BASE) php vendor/bin/behat
+.PHONY: behat
+
+##
+## Installation
+## ------------
+##
+
+install: ## Install the project
+install: vendor
+	$(DOCKER_EXEC_PHP) bin/console doctrine:schema:create
+.PHONY: install
 
 composer.lock: composer.json
 	$(DOCKER_EXEC_COMPOSER) update --lock --no-scripts --no-interaction
 
 vendor: composer.lock
 	$(DOCKER_EXEC_COMPOSER) install
-
-composer: ## Display base composer command
-composer:
-	@echo docker run --rm -it -v \"\$$PWD\":/app --user 1000:100 -w /app composer
 
 .DEFAULT_GOAL := help
 help:

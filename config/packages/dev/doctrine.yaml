@@ -1,0 +1,5 @@
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        url: 'sqlite:'
+        path: "%kernel.project_dir%/var/dev_db.sqlite"

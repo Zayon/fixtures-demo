@@ -1,3 +1,15 @@
 index:
     path: /
     controller: App\Action\DefaultAction
+    methods: [GET]
+
+list_product:
+    path: /products/
+    controller: App\Action\ListProductsAction
+    methods: [GET]
+
+add_product:
+    path: /products/
+    controller: App\Action\AddProductAction
+    methods: [POST]
+
