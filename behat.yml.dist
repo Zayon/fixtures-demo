@@ -1,0 +1,28 @@
+default:
+    autoload:
+        '': '%paths.base%/tests/functional/bootstrap'
+    suites:
+        default:
+            paths:
+                features: 'tests/functional/'
+            contexts:
+                - FeatureContext
+                - RestContext
+                - Behat\MinkExtension\Context\MinkContext
+                - Behatch\Context\JsonContext
+                - SharingContext
+                - FixtureContext:
+                      doctrine: '@doctrine'
+                      loader: '@fidry_alice_data_fixtures.doctrine.persister_loader'
+                      fixturesBasePath: '%paths.base%/tests/functional/fixtures/'
+
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                class: App\Kernel
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+            base_url: ''
+            sessions:
+                symfony2:
+                    symfony2: ~

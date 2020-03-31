@@ -8,7 +8,7 @@ DOCKER_EXEC_PHP = $(DOCKER_EXEC_BASE) php
 ## -------
 ##
 
-run: ## Runs the server
+run: ## Runs the server on http://localhost:8081
 run: vendor
 	$(DOCKER_EXEC_BASE) -p 8081:8081 --name fixture-demo php bin/console -vvv server:run 0.0.0.0:8081
 .PHONY: run
